@@ -121,6 +121,9 @@ extern "C" {
 #define A_WMI_PEER_EVENT(devt, eventCode, bssid)    \
     ar6000_peer_event ((devt), (eventCode), (bssid))
 
+#define A_WMI_ACM_THROTTLE_VI_EVENT(devt)\
+    ar6000_acm_throttle_vi_event(devt)
+
 #ifdef CONFIG_HOST_GPIO_SUPPORT
 
 #define A_WMI_GPIO_INTR_RX(intr_mask, input_values) \

@@ -2287,8 +2287,8 @@ ar6000_stop_endpoint(struct net_device *dev, A_BOOL keepprofile)
             ar->arWmiReady  = FALSE;
             ar->arConnected = FALSE;
             ar->arConnectPending = FALSE;
-            wmi_shutdown(ar->arWmi);
             ar->arWmiEnabled = FALSE;
+            wmi_shutdown(ar->arWmi);
             ar->arWmi = NULL;
             if (!keepprofile) {
                 ar->arWlanState = WLAN_ENABLED;
@@ -2535,6 +2535,7 @@ ar6000_init_control_info(AR_SOFTC_T *ar)
     A_MEMZERO(&ar->scParams, sizeof(ar->scParams));
     ar->scParams.shortScanRatio = WMI_SHORTSCANRATIO_DEFAULT;
     ar->scParams.scanCtrlFlags = DEFAULT_SCAN_CTRL_FLAGS;
+    ar->wmm_vi_throttle_flag = 0;
 
     /* Initialize the AP mode state info */
     {
@@ -3382,7 +3383,8 @@ static HTC_SEND_FULL_ACTION ar6000_tx_queue_full(void *Context, HTC_PACKET *pPac
             break;
         }
 
-        if (ar->arAcStreamPriMap[arEndpoint2Ac(ar,Endpoint)] < ar->arHiAcStreamActivePri) {
+	if(((!ar->wmm_vi_throttle_flag) && (ar->arAcStreamPriMap[arEndpoint2Ac(ar,Endpoint)] < ar->arHiAcStreamActivePri)) ||
+	   ((ar->wmm_vi_throttle_flag) && (WMM_AC_VI == arEndpoint2Ac(ar,Endpoint)))) {
                 /* this stream's priority is less than the highest active priority, we
                  * give preference to the highest priority stream by directing
                  * HTC to drop the packet that overflowed */
@@ -4411,7 +4413,7 @@ ar6000_disconnect_event(AR_SOFTC_T *ar, A_UINT8 reason, A_UINT8 *bssid,
     A_MEMZERO(ar->arBssid, sizeof(ar->arBssid));
     ar->arBssChannel = 0;
     ar->arBeaconInterval = 0;
-
+    ar->wmm_vi_throttle_flag = 0;
     ar6000_TxDataCleanup(ar);
 }
 
@@ -5294,6 +5296,15 @@ void ar6000_dtimexpiry_event(AR_SOFTC_T *ar)
     wmi_set_pvb_cmd(ar->arWmi, MCAST_AID, 0);
 }
 
+/* For WMM-S6 event, ar->wmm_vi_throttle_flag =1
+ * ar->wmm_vi_throttle_flag reset to 0 when disconnect/connect event
+ */
+void ar6000_acm_throttle_vi_event(void *devt)
+{
+	AR_SOFTC_T *ar = (AR_SOFTC_T *) devt;
+	ar->wmm_vi_throttle_flag = 1;
+}
+
 #ifdef USER_KEYS
 static A_STATUS
 
@@ -5423,7 +5434,7 @@ ar6000_ap_mode_profile_commit(struct ar6_softc *ar)
             return -EOPNOTSUPP;
         }
         break;
-    case WPA_AUTH:
+    case WPA_AUTH_:
     case WPA2_AUTH:
     case WPA_AUTH_CCKM:
     case WPA2_AUTH_CCKM:
@@ -5523,6 +5534,8 @@ ar6000_connect_to_ap(struct ar6_softc *ar)
         }
         
         ar->arConnectPending = TRUE;
+
+	ar->wmm_vi_throttle_flag = 0;
 
         status = wmi_connect_cmd(ar->arWmi, ar->arNetworkType,
                                  ar->arDot11AuthMode, ar->arAuthMode,

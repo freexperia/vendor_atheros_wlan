@@ -157,6 +157,8 @@ static A_STATUS wmi_dtimexpiry_event_rx(struct wmi_t *wmip, A_UINT8 *datap,
 
 static A_STATUS wmi_peer_node_event_rx (struct wmi_t *wmip, A_UINT8 *datap,
                                         int len);
+static A_STATUS
+wmi_acm_throttle_vi_event_rx(struct wmi_t *wmip, A_UINT8 *datap, A_UINT32 len);
 
 #if defined(UNDER_CE)
 #if defined(NDIS51_MINIPORT)
@@ -982,6 +984,11 @@ wmi_control_rx(struct wmi_t *wmip, void *osbuf)
         A_DPRINTF(DBG_WMI, (DBGFMT "WMI_SET_PARAMS_REPLY Event\n", DBGARG));
         status = wmi_acm_reject_event_rx(wmip, datap, len);
         break;
+    case (WMI_ACM_THROTTLE_VI_EVENTID):
+        A_DPRINTF(DBG_WMI, (DBGFMT "WMI_ACM_THROTTLE_VI Event\n", DBGARG));
+        status = wmi_acm_throttle_vi_event_rx(wmip, datap, len);
+        break;
+
     default:
         A_DPRINTF(DBG_WMI|DBG_ERROR,
             (DBGFMT "Unknown id 0x%x\n", DBGARG, id));
@@ -5013,6 +5020,12 @@ wmi_acm_reject_event_rx(struct wmi_t *wmip, A_UINT8 *datap, A_UINT32 len)
     return A_OK;
 }
 
+static A_STATUS
+wmi_acm_throttle_vi_event_rx(struct wmi_t *wmip, A_UINT8 *datap, A_UINT32 len)
+{
+    A_WMI_ACM_THROTTLE_VI_EVENT(wmip->wmi_devt);
+    return A_OK;
+}
 
 #ifdef CONFIG_HOST_DSET_SUPPORT
 A_STATUS

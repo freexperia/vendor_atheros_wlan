@@ -1,6 +1,7 @@
 //------------------------------------------------------------------------------
 // <copyright file="ioctl.c" company="Atheros">
 //    Copyright (c) 2004-2009 Atheros Corporation.  All rights reserved.
+//    Copyright (C) 2010 Sony Ericsson Mobile Communications AB
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -1152,7 +1153,7 @@ ar6000_ioctl_setparam(AR_SOFTC_T *ar, int param, int value)
         case IEEE80211_PARAM_WPA:
             switch (value) {
                 case WPA_MODE_WPA1:
-                    ar->arAuthMode = WPA_AUTH;
+                    ar->arAuthMode = WPA_AUTH_;
                     profChanged    = TRUE;
                     break;
                 case WPA_MODE_WPA2:
@@ -1168,7 +1169,7 @@ ar6000_ioctl_setparam(AR_SOFTC_T *ar, int param, int value)
         case IEEE80211_PARAM_AUTHMODE:
             switch(value) {
                 case IEEE80211_AUTH_WPA_PSK:
-                    if (WPA_AUTH == ar->arAuthMode) {
+                    if (WPA_AUTH_ == ar->arAuthMode) {
                         ar->arAuthMode = WPA_PSK_AUTH;
                         profChanged    = TRUE;
                     } else if (WPA2_AUTH == ar->arAuthMode) {

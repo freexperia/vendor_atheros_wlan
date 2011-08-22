@@ -1,6 +1,7 @@
 //------------------------------------------------------------------------------
 // <copyright file="wireless_ext.c" company="Atheros">
 //    Copyright (c) 2004-2009 Atheros Corporation.  All rights reserved.
+//    Copyright (C) 2010 Sony Ericsson Mobile Communications AB
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -1326,7 +1327,7 @@ ar6000_ioctl_siwauth(struct net_device *dev,
             if (value & IW_AUTH_WPA_VERSION_DISABLED) {
                 ar->arAuthMode = NONE_AUTH;
             } else if (value & IW_AUTH_WPA_VERSION_WPA) {
-                    ar->arAuthMode = WPA_AUTH;
+                    ar->arAuthMode = WPA_AUTH_;
             } else if (value & IW_AUTH_WPA_VERSION_WPA2) {
                     ar->arAuthMode = WPA2_AUTH;
             } else {
@@ -1378,7 +1379,7 @@ ar6000_ioctl_siwauth(struct net_device *dev,
             break;
         case IW_AUTH_KEY_MGMT:
             if (value & IW_AUTH_KEY_MGMT_PSK) {
-                if (WPA_AUTH == ar->arAuthMode) {
+                if (WPA_AUTH_ == ar->arAuthMode) {
                     ar->arAuthMode = WPA_PSK_AUTH;
                 } else if (WPA2_AUTH == ar->arAuthMode) {
                     ar->arAuthMode = WPA2_PSK_AUTH;
@@ -1480,7 +1481,7 @@ static int ar6000_ioctl_giwauth(struct net_device *dev,
         case IW_AUTH_WPA_VERSION:
             if (ar->arAuthMode == NONE_AUTH) {
                 data->value |= IW_AUTH_WPA_VERSION_DISABLED;
-            } else if (ar->arAuthMode == WPA_AUTH) {
+            } else if (ar->arAuthMode == WPA_AUTH_) {
                 data->value |= IW_AUTH_WPA_VERSION_WPA;
             } else if (ar->arAuthMode == WPA2_AUTH) {
                 data->value |= IW_AUTH_WPA_VERSION_WPA2;
@@ -1526,7 +1527,7 @@ static int ar6000_ioctl_giwauth(struct net_device *dev,
             if ((ar->arAuthMode == WPA_PSK_AUTH) ||
                 (ar->arAuthMode == WPA2_PSK_AUTH)) {
                 data->value |= IW_AUTH_KEY_MGMT_PSK;
-            } else if ((ar->arAuthMode == WPA_AUTH) ||
+            } else if ((ar->arAuthMode == WPA_AUTH_) ||
                        (ar->arAuthMode == WPA2_AUTH)) {
                 data->value |= IW_AUTH_KEY_MGMT_802_1X;
             }

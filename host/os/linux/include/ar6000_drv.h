@@ -366,6 +366,7 @@ typedef struct ar6_softc {
     A_UINT16                arOsPowerCtrl;
     A_UINT16                arWowState;
 #endif
+    A_UINT16                wmm_vi_throttle_flag;
     WMI_SCAN_PARAMS_CMD scParams;
 } AR_SOFTC_T;
 

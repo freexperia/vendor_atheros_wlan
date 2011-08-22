@@ -149,6 +149,8 @@ void ar6000_pspoll_event(struct ar6_softc *ar,A_UINT8 aid);
 
 void ar6000_dtimexpiry_event(struct ar6_softc *ar);
 
+void ar6000_acm_throttle_vi_event(void *devt);
+
 A_STATUS ar6000_connect_to_ap(struct ar6_softc *ar);
 A_STATUS ar6000_set_wlan_state(struct ar6_softc *ar, AR6000_WLAN_STATE state);
 #ifdef __cplusplus

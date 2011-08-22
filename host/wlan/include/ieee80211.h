@@ -1,6 +1,7 @@
 //------------------------------------------------------------------------------
 // <copyright file="ieee80211.h" company="Atheros">
 //    Copyright (c) 2004-2008 Atheros Corporation.  All rights reserved.
+//    Copyright (C) 2010 Sony Ericsson Mobile Communications AB
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -247,8 +248,8 @@ enum {
 #define ATH_OUI_SUBTYPE     0x01
 #define ATH_OUI_VERSION     0x00
 
-#define WPA_OUI             0xf25000
-#define WPA_OUI_TYPE        0x01
+#define WPA_OUI_            0xf25000
+#define WPA_OUI_TYPE_       0x01
 #define WPA_VERSION         1          /* current supported version */
 
 #define WPA_CSE_NULL        0x00

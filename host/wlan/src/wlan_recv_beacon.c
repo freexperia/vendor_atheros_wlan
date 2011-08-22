@@ -1,6 +1,7 @@
 //------------------------------------------------------------------------------
 // <copyright file="wlan_recv_beacon.c" company="Atheros">
 //    Copyright (c) 2004-2008 Atheros Corporation.  All rights reserved.
+//    Copyright (C) 2010 Sony Ericsson Mobile Communications AB
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -57,7 +58,7 @@
 static int __inline
 iswpaoui(const A_UINT8 *frm)
 {
-    return frm[1] > 3 && LE_READ_4(frm+2) == ((WPA_OUI_TYPE<<24)|WPA_OUI);
+    return frm[1] > 3 && LE_READ_4(frm+2) == ((WPA_OUI_TYPE_<<24)|WPA_OUI_);
 }
 
 static int __inline
@@ -90,7 +91,7 @@ isatherosoui(const A_UINT8 *frm)
 static int __inline
 iswscoui(const A_UINT8 *frm)
 {
-    return frm[1] > 3 && LE_READ_4(frm+2) == ((0x04<<24)|WPA_OUI);
+    return frm[1] > 3 && LE_READ_4(frm+2) == ((0x04<<24)|WPA_OUI_);
 }
 
 #ifdef PYXIS_ADHOC

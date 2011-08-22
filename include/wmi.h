@@ -1,6 +1,7 @@
 //------------------------------------------------------------------------------
 // <copyright file="wmi.h" company="Atheros">
 //    Copyright (c) 2004-2008 Atheros Corporation.  All rights reserved.
+//    Copyright (C) 2010 Sony Ericsson Mobile Communications AB
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -275,7 +276,7 @@ typedef enum {
 
 typedef enum {
     NONE_AUTH           = 0x01,
-    WPA_AUTH            = 0x02,
+    WPA_AUTH_           = 0x02,
     WPA_PSK_AUTH        = 0x03,
     WPA2_AUTH           = 0x04,
     WPA2_PSK_AUTH       = 0x05,
@@ -1247,7 +1248,8 @@ typedef enum {
     WMI_DTIMEXPIRY_EVENTID,
     WMI_WLAN_VERSION_EVENTID,
     WMI_SET_PARAMS_REPLY_EVENTID,
-    WMI_ACM_REJECT_EVENTID
+    WMI_ACM_REJECT_EVENTID,
+    WMI_ACM_THROTTLE_VI_EVENTID
 } WMI_EVENT_ID;
 
 typedef enum {
